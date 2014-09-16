@@ -1,6 +1,7 @@
 package com.yahoo.ddosch.gridimagesearch.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,11 +12,15 @@ import com.yahoo.ddosch.gridimagesearch.R;
 
 public class ImageDisplayActivity extends Activity {
 
+	private String url;
+	private String title;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_image_display);
-		final String url = getIntent().getStringExtra("url");
+		url = getIntent().getStringExtra("url");
+		title = getIntent().getStringExtra("title");
 		final ImageView ivImageResult = (ImageView)findViewById(R.id.ivImageResult);
 		Picasso.with(this).load(url).into(ivImageResult);
 	}
@@ -37,5 +42,18 @@ public class ImageDisplayActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onBackPressed() {
+	    finish();
+	}
+	
+	public void onEmail(MenuItem mi) {
+		final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND); 
+		emailIntent.setType("text/html");
+		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, title); 
+		emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, url); 
+		startActivity(Intent.createChooser(emailIntent, "Email this image"));
 	}
 }

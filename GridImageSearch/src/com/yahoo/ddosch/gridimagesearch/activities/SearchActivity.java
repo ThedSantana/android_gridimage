@@ -38,9 +38,9 @@ public class SearchActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
-		setupViews();
 		settings = Settings.getInstance();
 		settings.setStart(0);
+		setupViews();
 		imageResults = new ArrayList<ImageResult>();
 		aImageResults = new ImageResultsAdapter(this, imageResults);
 		gvResults.setAdapter(aImageResults);
@@ -68,11 +68,15 @@ public class SearchActivity extends Activity {
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		etQuery.setText(settings.getQuery());
         onImageSearch(null);
     }
 	
 	private void setupViews() {
 		etQuery = (EditText)findViewById(R.id.etQuery);
+		if (settings.getQuery() != null && !settings.getQuery().trim().isEmpty()) {
+			etQuery.setText(settings.getQuery());
+		}
 		gvResults = (GridView)findViewById(R.id.gvResults);
 		gvResults.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -80,13 +84,16 @@ public class SearchActivity extends Activity {
 				final Intent intent = new Intent(SearchActivity.this, ImageDisplayActivity.class);
 				final ImageResult imageResult = imageResults.get(position);
 				intent.putExtra("url", imageResult.getFullUrl());
-				startActivity(intent);
+				intent.putExtra("title", imageResult.getTitle());
+				startActivityForResult(intent, 0);
 			}
 		});
 	}
 	
 	public void onImageSearch(View v) {
-		settings.setQuery(etQuery.getText().toString());
+		if (v != null) {
+			settings.setQuery(etQuery.getText().toString());
+		}
 		final AsyncHttpClient client = new AsyncHttpClient();
 		client.get(getQuery(), new JsonHttpResponseHandler() {
 			@Override

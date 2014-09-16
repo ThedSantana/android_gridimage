@@ -18,5 +18,6 @@
     <string name="settings_none">None</string>
     <string name="settings_all">All</string>
     <string name="search_again">Search</string>
+    <string name="email_icon">Email</string>
 
 </resources>
