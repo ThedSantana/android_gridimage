@@ -2,7 +2,7 @@
 
 This app allows users to search Google images and view results in a grid, select specific images and filter searches based on specific riteria
 
-Time spent: ? hours
+Time spent: 6 hours
 
 Completed user stories:
 
